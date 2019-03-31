@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://geocoding.services.operation.cuberoute.com" xmlns:ns1="http://xsd.geocoding.services.operation.cuberoute.com" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns0="http://geocoding.services.operation.cuberoute.com" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+<wsdl:documentation>GeocodingService</wsdl:documentation>
+  <wsdl:types>
+    <xs:schema targetNamespace="http://xsd.geocoding.services.operation.cuberoute.com" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://xsd.geocoding.services.operation.cuberoute.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<import namespace="http://geocoding.services.operation.cuberoute.com"/>
+		 	<xs:complexType name="LookupRequest">
+            	<xs:sequence>
+                	<xs:element minOccurs="1" name="address" nillable="false" type="ns1:Address"/> 
+  					<xs:element minOccurs="0" name="customerFirstName" nillable="true" type="xs:string"/> 
+  					<xs:element minOccurs="0" name="customerLastName" nillable="true" type="xs:string"/>
+  					<xs:element minOccurs="0" name="customerCompanyName" nillable="true" type="xs:string"/>
+  					<xs:element minOccurs="0" name="customerID" nillable="true" type="xs:string"/>
+  					<xs:element minOccurs="0" name="distanceDepot" nillable="true" type="xs:string"/>
+  					<xs:element minOccurs="1" name="username" nillable="false" type="xs:string"/>
+		    		<xs:element minOccurs="1" name="passwordHash" nillable="false" type="xs:string"/>
+		    		<xs:element minOccurs="1" name="organizationKey" nillable="false" type="xs:string"/>
+                </xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Address">
+				<xs:sequence>
+  					<xs:element minOccurs="0" name="addressLine1" nillable="true" type="xs:string"/> 
+  					<xs:element minOccurs="0" name="addressLine2" nillable="true" type="xs:string"/> 
+  					<xs:element minOccurs="0" name="city" nillable="true" type="xs:string"/> 
+  					<xs:element minOccurs="0" name="countryCode" nillable="true" type="xs:string"/> 
+  					<xs:element minOccurs="0" name="latitude" nillable="true" type="xs:float"/> 
+  					<xs:element minOccurs="0" name="longitude" nillable="true" type="xs:float"/> 
+  					<xs:element minOccurs="0" name="phoneNumber1" nillable="true" type="xs:string"/> 
+  					<xs:element minOccurs="0" name="phoneNumber2" nillable="true" type="xs:string"/> 
+  					<xs:element minOccurs="0" name="postalCode" nillable="true" type="xs:string"/> 
+  					<xs:element minOccurs="0" name="stateCode" nillable="true" type="xs:string"/>
+  					<xs:element minOccurs="0" name="crossStreet1" nillable="true" type="xs:string"/>
+  					<xs:element minOccurs="0" name="crossStreet2" nillable="true" type="xs:string"/>
+  					<xs:element minOccurs="0" name="mileage" nillable="true" type="xs:float"/>
+  					<xs:element minOccurs="0" name="driveTime" nillable="true" type="xs:float"/>
+  					<xs:element minOccurs="0" name="territoryLabel" nillable="true" type="xs:string"/> 
+  					<xs:element minOccurs="0" name="fulfillingDepot" nillable="true" type="xs:string"/> 
+  				</xs:sequence>
+  			</xs:complexType>
+			<xs:complexType name="Response">
+	      		<xs:sequence>
+		      		<xs:element minOccurs="1" name="responseCode" nillable="false" type="ns1:ResponseCode"/>
+		      		<xs:element maxOccurs="unbounded" minOccurs="0" name="addresses" nillable="true" type="ns1:Address"/> 
+		      		<xs:element minOccurs="0" name="responseDescription" nillable="true" type="xs:string"/>
+	      		</xs:sequence>
+      		</xs:complexType>  
+      		<xs:simpleType name="ResponseCode">
+	      		<xs:restriction base="xs:string">
+		    		<xs:enumeration value="Success"/>
+		      		<xs:enumeration value="InvalidData"/>
+		      		<xs:enumeration value="AuthenticationFailed"/>
+	      		</xs:restriction>
+      		</xs:simpleType>			
+            <xs:complexType name="LookupResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="1" name="response" nillable="false" type="ns1:Response"/>
+                </xs:sequence>
+			</xs:complexType>			
+		</xs:schema>
+    <xs:schema targetNamespace="http://geocoding.services.operation.cuberoute.com" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://xsd.geocoding.services.operation.cuberoute.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<import namespace="http://xsd.geocoding.services.operation.cuberoute.com"/>
+			<xs:element name="lookup">
+            	<xs:complexType>
+                	<xs:sequence>
+                    	<xs:element maxOccurs="unbounded" minOccurs="0" name="request" nillable="true" type="ns1:LookupRequest"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+            <xs:element name="lookupResponse">
+            	<xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ns1:LookupResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+			</xs:element>
+		</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="lookupRequest">
+    <wsdl:part name="parameters" element="ns0:lookup">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="lookupResponse">
+    <wsdl:part name="parameters" element="ns0:lookupResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="GeocodingServicePortType">
+    <wsdl:operation name="lookup">
+      <wsdl:input message="ns0:lookupRequest" wsaw:Action="ns1:lookup">
+    </wsdl:input>
+      <wsdl:output message="ns0:lookupResponse" wsaw:Action="urn:lookupResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GeocodingServiceSOAP12Binding" type="ns0:GeocodingServicePortType">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="lookup">
+      <soap12:operation soapAction="urn:lookup" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="GeocodingServiceHttpBinding" type="ns0:GeocodingServicePortType">
+    <http:binding verb="POST"/>
+    <wsdl:operation name="lookup">
+      <http:operation location="GeocodingService/lookup"/>
+      <wsdl:input>
+        <mime:content part="lookup" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="lookup" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="GeocodingServiceSOAP11Binding" type="ns0:GeocodingServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="lookup">
+      <soap:operation soapAction="urn:lookup" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GeocodingService">
+    <wsdl:port name="GeocodingServiceSOAP12port_http" binding="ns0:GeocodingServiceSOAP12Binding">
+      <soap12:address location="http://ondemand.qa.descartes.com/axis2/services/GeocodingService.GeocodingServiceSOAP12port_http/"/>
+    </wsdl:port>
+    <wsdl:port name="GeocodingServiceSOAP11port_http" binding="ns0:GeocodingServiceSOAP11Binding">
+      <soap:address location="http://ondemand.qa.descartes.com/axis2/services/GeocodingService.GeocodingServiceSOAP11port_http/"/>
+    </wsdl:port>
+    <wsdl:port name="GeocodingServiceHttpport" binding="ns0:GeocodingServiceHttpBinding">
+      <http:address location="https://ondemand.descartes.com/axis2/services/GeocodingService.GeocodingServiceHttpport/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

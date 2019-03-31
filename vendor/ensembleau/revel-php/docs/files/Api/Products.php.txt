@@ -1,0 +1,72 @@
+<?php namespace Revel\Api;
+
+use Revel\Utils;
+use Revel\Models\Product;
+
+class Products extends Api {
+
+	/**
+	 * Get all {@link Product products}.
+	 *
+	 * @return Product[]
+	 */
+	public function all() {
+		return $this->cache('all', function() {
+			return Product::many($this->revel, $this->get('/resources/Product?limit=1000')->objects());
+		});
+	}
+
+	/**
+	 * Get a single product.
+	 *
+	 * @param int|string The product ID or resource URL.
+	 *
+	 * @return Product
+	 */
+	public function findById($id) {
+		$id = Utils::extractId($id);
+
+		return $this->cache('findById' . $id, function() use ($id) {
+			foreach ($this->all() as $product) {
+				if ($product->id === $id) return $product;
+			}
+
+			return null;
+		});
+	}
+
+	/**
+	 * Get a single product using its barcode.
+	 *
+	 * @param string $barcode The product barcode.
+	 *
+	 * @return Product
+	 */
+	public function findByBarcode($barcode) {
+		return $this->cache('findByBarcode' . $barcode, function() use ($barcode) {
+			foreach ($this->all() as $product) {
+				if ($product->barcode === $barcode) return $product;
+			}
+
+			return null;
+		});
+	}
+
+	/**
+	 * Get a single product using its UUI.
+	 *
+	 * @param string $uuid The product UUID.
+	 *
+	 * @return Product
+	 */
+	public function findByUUID($uuid) {
+		return $this->cache('findByUUID' . $uuid, function() use ($uuid) {
+			foreach ($this->all() as $product) {
+				if ($product->uuid === $uuid) return $product;
+			}
+
+			return null;
+		});
+	}
+
+}

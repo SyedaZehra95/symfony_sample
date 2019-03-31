@@ -1,0 +1,985 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="FVVideoScan_Integration"
+  targetNamespace="urn:cognitec.com/VideoScan/WS/Main/2.0/XMLSchema/FVVideoScan_Integration.wsdl"
+  xmlns:tns="urn:cognitec.com/VideoScan/WS/Main/2.0/XMLSchema/FVVideoScan_Integration.wsdl"
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:ws="urn:cognitec.com/VideoScan/WS/Main/2.0/XMLSchema"
+  xmlns:SOAP="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:HTTP="http://schemas.xmlsoap.org/wsdl/http/"
+  xmlns:MIME="http://schemas.xmlsoap.org/wsdl/mime/"
+  xmlns:DIME="http://schemas.xmlsoap.org/ws/2002/04/dime/wsdl/"
+  xmlns:WSDL="http://schemas.xmlsoap.org/wsdl/"
+  xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+<types>
+
+  <schema targetNamespace="urn:cognitec.com/VideoScan/WS/Main/2.0/XMLSchema"
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:ws="urn:cognitec.com/VideoScan/WS/Main/2.0/XMLSchema"
+    xmlns="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="unqualified"
+    attributeFormDefault="unqualified">
+    <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+    <simpleType name="VideoSourceId"><!-- ws__VideoSourceId -->
+      <restriction base="xsd:string">
+      </restriction>
+    </simpleType>
+    <complexType name="Image"><!-- ws__Image -->
+          <sequence>
+            <element name="binaryImg" type="xsd:base64Binary" minOccurs="1" maxOccurs="1" nillable="true"/><!-- ws__Image::binaryImg -->
+          </sequence>
+    </complexType>
+    <complexType name="Position"><!-- ws__Position -->
+          <sequence>
+            <element name="x" type="xsd:float" minOccurs="1" maxOccurs="1"/><!-- ws__Position::x -->
+            <element name="y" type="xsd:float" minOccurs="1" maxOccurs="1"/><!-- ws__Position::y -->
+          </sequence>
+    </complexType>
+    <complexType name="Eyes"><!-- ws__Eyes -->
+          <sequence>
+            <element name="left" type="ws:Position" minOccurs="1" maxOccurs="1"/><!-- ws__Eyes::left -->
+            <element name="right" type="ws:Position" minOccurs="1" maxOccurs="1"/><!-- ws__Eyes::right -->
+            <element name="confidence" type="xsd:float" minOccurs="1" maxOccurs="1"/><!-- ws__Eyes::confidence -->
+          </sequence>
+    </complexType>
+    <complexType name="AnnotatedImage"><!-- ws__AnnotatedImage -->
+          <sequence>
+            <element name="img" type="ws:Image" minOccurs="1" maxOccurs="1"/><!-- ws__AnnotatedImage::img -->
+            <element name="annotation" type="ws:Eyes" minOccurs="1" maxOccurs="1"/><!-- ws__AnnotatedImage::annotation -->
+          </sequence>
+    </complexType>
+    <complexType name="ImageSet"><!-- ws__ImageSet -->
+          <sequence>
+            <element name="images" type="ws:Image" minOccurs="0" maxOccurs="unbounded"/><!-- ws__ImageSet::images -->
+          </sequence>
+    </complexType>
+    <complexType name="StringList"><!-- ws__StringList -->
+          <sequence>
+            <element name="values" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/><!-- ws__StringList::values -->
+          </sequence>
+    </complexType>
+    <complexType name="AnnotatedImageSet"><!-- ws__AnnotatedImageSet -->
+          <sequence>
+            <element name="faces" type="ws:AnnotatedImage" minOccurs="0" maxOccurs="unbounded"/><!-- ws__AnnotatedImageSet::faces -->
+          </sequence>
+    </complexType>
+    <complexType name="CaseProperty"><!-- ws__CaseProperty -->
+          <sequence>
+            <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__CaseProperty::name -->
+            <element name="value" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__CaseProperty::value -->
+          </sequence>
+    </complexType>
+    <complexType name="CaseProperties"><!-- ws__CaseProperties -->
+          <sequence>
+            <element name="values" type="ws:CaseProperty" minOccurs="0" maxOccurs="unbounded"/><!-- ws__CaseProperties::values -->
+          </sequence>
+    </complexType>
+    <complexType name="GalleryCase"><!-- ws__GalleryCase -->
+          <sequence>
+            <element name="caseId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__GalleryCase::caseId -->
+            <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__GalleryCase::name -->
+            <element name="property" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__GalleryCase::property -->
+          </sequence>
+    </complexType>
+    <complexType name="ImageProcessingInfo"><!-- ws__ImageProcessingInfo -->
+          <sequence>
+            <element name="id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__ImageProcessingInfo::id -->
+            <element name="foundEyes" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ws__ImageProcessingInfo::foundEyes -->
+            <element name="eyes" type="ws:Eyes" minOccurs="1" maxOccurs="1"/><!-- ws__ImageProcessingInfo::eyes -->
+            <element name="eyeConfidence" type="xsd:float" minOccurs="1" maxOccurs="1"/><!-- ws__ImageProcessingInfo::eyeConfidence -->
+            <element name="sampleRejected" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ws__ImageProcessingInfo::sampleRejected -->
+            <element name="rejectedReason" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__ImageProcessingInfo::rejectedReason -->
+          </sequence>
+    </complexType>
+    <complexType name="EnrollmentResult"><!-- ws__EnrollmentResult -->
+          <sequence>
+            <element name="transactionId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__EnrollmentResult::transactionId -->
+            <element name="processedImages" type="ws:ImageProcessingInfo" minOccurs="0" maxOccurs="unbounded"/><!-- ws__EnrollmentResult::processedImages -->
+            <element name="successfullEnrolled" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ws__EnrollmentResult::successfullEnrolled -->
+          </sequence>
+    </complexType>
+    <complexType name="Match"><!-- ws__Match -->
+          <sequence>
+            <element name="rank" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- ws__Match::rank -->
+            <element name="caseID" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__Match::caseID -->
+            <element name="score" type="xsd:float" minOccurs="1" maxOccurs="1"/><!-- ws__Match::score -->
+          </sequence>
+    </complexType>
+    <complexType name="MatchSet"><!-- ws__MatchSet -->
+          <sequence>
+            <element name="m" type="ws:Match" minOccurs="0" maxOccurs="unbounded"/><!-- ws__MatchSet::m -->
+          </sequence>
+    </complexType>
+    <complexType name="IdentificationResult"><!-- ws__IdentificationResult -->
+          <sequence>
+            <element name="transactionId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__IdentificationResult::transactionId -->
+            <element name="processedImage" type="ws:ImageProcessingInfo" minOccurs="1" maxOccurs="1"/><!-- ws__IdentificationResult::processedImage -->
+            <element name="matches" type="ws:MatchSet" minOccurs="1" maxOccurs="1"/><!-- ws__IdentificationResult::matches -->
+          </sequence>
+    </complexType>
+    <complexType name="VideoSource"><!-- ws__VideoSource -->
+          <sequence>
+            <element name="id" type="ws:VideoSourceId" minOccurs="1" maxOccurs="1"/><!-- ws__VideoSource::id -->
+            <element name="displayName" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__VideoSource::displayName -->
+            <element name="videoServerHost" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__VideoSource::videoServerHost -->
+            <element name="videoServerPort" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- ws__VideoSource::videoServerPort -->
+            <element name="streamProcessorServerHost" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__VideoSource::streamProcessorServerHost -->
+            <element name="streamProcessorServerPort" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- ws__VideoSource::streamProcessorServerPort -->
+            <element name="rtspStream" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__VideoSource::rtspStream -->
+            <element name="fieldOfViewAngle" type="xsd:float" minOccurs="1" maxOccurs="1"/><!-- ws__VideoSource::fieldOfViewAngle -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="alive">
+      <complexType>
+          <sequence>
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="aliveResponse" type="ws:aliveResponse"/>
+    <complexType name="aliveResponse">
+          <sequence>
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getProductVersion">
+      <complexType>
+          <sequence>
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="getProductVersionResponse">
+      <complexType>
+          <sequence>
+            <element name="version" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__getProductVersion::version -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="fvdb-createAndAddCase">
+      <complexType>
+          <sequence>
+            <element name="properties" type="ws:CaseProperties" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__fvdb_createAndAddCase::properties -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="CreateAddCaseResponse" type="ws:CreateAddCaseResponse"/>
+    <complexType name="CreateAddCaseResponse">
+          <sequence>
+            <element name="caseId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__CreateAddCaseResponse::caseId -->
+            <element name="success" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ws__CreateAddCaseResponse::success -->
+            <element name="errorMsg" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__CreateAddCaseResponse::errorMsg -->
+            <element name="warnMsg" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ws__CreateAddCaseResponse::warnMsg -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="fvdb-getAllExistingCases">
+      <complexType>
+          <sequence>
+            <element name="galleryID" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__fvdb_getAllExistingCases::galleryID -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="GetAllExistingCasesResponse" type="ws:GetAllExistingCasesResponse"/>
+    <complexType name="GetAllExistingCasesResponse">
+          <sequence>
+            <element name="values" type="ws:GalleryCase" minOccurs="0" maxOccurs="unbounded"/><!-- ws__GetAllExistingCasesResponse::values -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="fvdb-addCase">
+      <complexType>
+          <sequence>
+            <element name="caseID" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__fvdb_addCase::caseID -->
+            <element name="properties" type="ws:CaseProperties" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__fvdb_addCase::properties -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="addCaseResponse" type="ws:addCaseResponse"/>
+    <complexType name="addCaseResponse">
+          <sequence>
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="fvdb-changeCaseProperties">
+      <complexType>
+          <sequence>
+            <element name="caseID" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__fvdb_changeCaseProperties::caseID -->
+            <element name="properties" type="ws:CaseProperties" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__fvdb_changeCaseProperties::properties -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="changeCaseResponse" type="ws:changeCaseResponse"/>
+    <complexType name="changeCaseResponse">
+          <sequence>
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="fvdb-caseExists">
+      <complexType>
+          <sequence>
+            <element name="caseID" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__fvdb_caseExists::caseID -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="fvdb-caseExistsResponse">
+      <complexType>
+          <sequence>
+            <element name="exists" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ws__fvdb_caseExists::exists -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="fvdb-deleteCase">
+      <complexType>
+          <sequence>
+            <element name="caseID" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__fvdb_deleteCase::caseID -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="deleteCaseResponse" type="ws:deleteCaseResponse"/>
+    <complexType name="deleteCaseResponse">
+          <sequence>
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="fvdb-deleteFIR">
+      <complexType>
+          <sequence>
+            <element name="caseID" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__fvdb_deleteFIR::caseID -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="deleteFIRResponse" type="ws:deleteFIRResponse"/>
+    <complexType name="deleteFIRResponse">
+          <sequence>
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="fvdb-getReferenceImage">
+      <complexType>
+          <sequence>
+            <element name="caseID" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__fvdb_getReferenceImage::caseID -->
+            <element name="thumbnailHeight" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- ws__fvdb_getReferenceImage::thumbnailHeight -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="ReferenceImageResponse" type="ws:ReferenceImageResponse"/>
+    <complexType name="ReferenceImageResponse">
+          <sequence>
+            <element name="face" type="ws:AnnotatedImage" minOccurs="1" maxOccurs="1"/><!-- ws__ReferenceImageResponse::face -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="fvdb-getCaseImages">
+      <complexType>
+          <sequence>
+            <element name="caseID" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__fvdb_getCaseImages::caseID -->
+            <element name="thumbnailHeight" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- ws__fvdb_getCaseImages::thumbnailHeight -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="CaseImagesResponse" type="ws:CaseImagesResponse"/>
+    <complexType name="CaseImagesResponse">
+          <sequence>
+            <element name="faces" type="ws:AnnotatedImage" minOccurs="0" maxOccurs="unbounded"/><!-- ws__CaseImagesResponse::faces -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="enrollment-db">
+      <complexType>
+          <sequence>
+            <element name="caseID" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__enrollment_db::caseID -->
+            <element name="authName" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__enrollment_db::authName -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="EnrollmentResponseDB" type="ws:EnrollmentResponseDB"/>
+    <complexType name="EnrollmentResponseDB">
+          <sequence>
+            <element name="val" type="ws:EnrollmentResult" minOccurs="1" maxOccurs="1"/><!-- ws__EnrollmentResponseDB::val -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="enrollment-set">
+      <complexType>
+          <sequence>
+            <element name="caseId" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__enrollment_set::caseId -->
+            <element name="imgSet" type="ws:ImageSet" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__enrollment_set::imgSet -->
+            <element name="authName" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__enrollment_set::authName -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="EnrollmentResponseSET" type="ws:EnrollmentResponseSET"/>
+    <complexType name="EnrollmentResponseSET">
+          <sequence>
+            <element name="val" type="ws:EnrollmentResult" minOccurs="1" maxOccurs="1"/><!-- ws__EnrollmentResponseSET::val -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="enrollment-refset">
+      <complexType>
+          <sequence>
+            <element name="caseId" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__enrollment_refset::caseId -->
+            <element name="imgSet" type="ws:StringList" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__enrollment_refset::imgSet -->
+            <element name="authName" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__enrollment_refset::authName -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="EnrollmentResponseREFSET" type="ws:EnrollmentResponseREFSET"/>
+    <complexType name="EnrollmentResponseREFSET">
+          <sequence>
+            <element name="val" type="ws:EnrollmentResult" minOccurs="1" maxOccurs="1"/><!-- ws__EnrollmentResponseREFSET::val -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="enrollment-annotated">
+      <complexType>
+          <sequence>
+            <element name="caseId" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__enrollment_annotated::caseId -->
+            <element name="aImgSet" type="ws:AnnotatedImageSet" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__enrollment_annotated::aImgSet -->
+            <element name="authName" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__enrollment_annotated::authName -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="EnrollmentResponseANN" type="ws:EnrollmentResponseANN"/>
+    <complexType name="EnrollmentResponseANN">
+          <sequence>
+            <element name="val" type="ws:EnrollmentResult" minOccurs="1" maxOccurs="1"/><!-- ws__EnrollmentResponseANN::val -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="identification-caseID">
+      <complexType>
+          <sequence>
+            <element name="caseID" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__identification_caseID::caseID -->
+            <element name="authName" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__identification_caseID::authName -->
+            <element name="maxMatches" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- ws__identification_caseID::maxMatches -->
+            <element name="matchListThreshold" type="xsd:float" minOccurs="1" maxOccurs="1"/><!-- ws__identification_caseID::matchListThreshold -->
+            <element name="priority" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- ws__identification_caseID::priority -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="Ident-CaseID-Response" type="ws:Ident-CaseID-Response"/>
+    <complexType name="Ident-CaseID-Response">
+          <sequence>
+            <element name="val" type="ws:IdentificationResult" minOccurs="1" maxOccurs="1"/><!-- ws__Ident_CaseID_Response::val -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="identification">
+      <complexType>
+          <sequence>
+            <element name="image" type="ws:Image" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__identification::image -->
+            <element name="authName" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__identification::authName -->
+            <element name="maxMatches" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- ws__identification::maxMatches -->
+            <element name="matchListThreshold" type="xsd:float" minOccurs="1" maxOccurs="1"/><!-- ws__identification::matchListThreshold -->
+            <element name="priority" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- ws__identification::priority -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="Ident-Response" type="ws:Ident-Response"/>
+    <complexType name="Ident-Response">
+          <sequence>
+            <element name="val" type="ws:IdentificationResult" minOccurs="1" maxOccurs="1"/><!-- ws__Ident_Response::val -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="identification-annotated">
+      <complexType>
+          <sequence>
+            <element name="annotatedImage" type="ws:AnnotatedImage" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__identification_annotated::annotatedImage -->
+            <element name="authName" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- ws__identification_annotated::authName -->
+            <element name="maxMatches" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- ws__identification_annotated::maxMatches -->
+            <element name="matchListThreshold" type="xsd:float" minOccurs="1" maxOccurs="1"/><!-- ws__identification_annotated::matchListThreshold -->
+            <element name="priority" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- ws__identification_annotated::priority -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="Ident-Annotated-Response" type="ws:Ident-Annotated-Response"/>
+    <complexType name="Ident-Annotated-Response">
+          <sequence>
+            <element name="val" type="ws:IdentificationResult" minOccurs="1" maxOccurs="1"/><!-- ws__Ident_Annotated_Response::val -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getVideoSources">
+      <complexType>
+          <sequence>
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getVideoSourcesResponse" type="ws:getVideoSourcesResponse"/>
+    <complexType name="getVideoSourcesResponse">
+          <sequence>
+            <element name="videoSources" type="ws:VideoSource" minOccurs="0" maxOccurs="unbounded"/><!-- ws__getVideoSourcesResponse::videoSources -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getConfiguredVideoSources">
+      <complexType>
+          <sequence>
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getConfiguredVideoSourcesResponse" type="ws:getConfiguredVideoSourcesResponse"/>
+    <complexType name="getConfiguredVideoSourcesResponse">
+          <sequence>
+            <element name="videoSources" type="ws:VideoSource" minOccurs="0" maxOccurs="unbounded"/><!-- ws__getConfiguredVideoSourcesResponse::videoSources -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="start-processing-video">
+      <complexType>
+          <sequence>
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="Start-Proc-Video-Response" type="ws:Start-Proc-Video-Response"/>
+    <complexType name="Start-Proc-Video-Response">
+          <sequence>
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="stop-processing-video">
+      <complexType>
+          <sequence>
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="Stop-Proc-Video-Response" type="ws:Stop-Proc-Video-Response"/>
+    <complexType name="Stop-Proc-Video-Response">
+          <sequence>
+          </sequence>
+    </complexType>
+  </schema>
+
+</types>
+
+<message name="alive">
+  <part name="Body" element="ws:alive"/><!-- ws__alive::ws__alive -->
+</message>
+
+<message name="aliveResponse">
+  <part name="Body" element="ws:aliveResponse"/><!-- ws__alive::out -->
+</message>
+
+<message name="getProductVersionRequest">
+  <part name="Body" element="ws:getProductVersion"/><!-- ws__getProductVersion::ws__getProductVersion -->
+</message>
+
+<message name="getProductVersionResponse">
+  <part name="Body" element="ws:getProductVersionResponse"/>
+</message>
+
+<message name="fvdb-createAndAddCase">
+  <part name="Body" element="ws:fvdb-createAndAddCase"/><!-- ws__fvdb_createAndAddCase::ws__fvdb_createAndAddCase -->
+</message>
+
+<message name="CreateAddCaseResponse">
+  <part name="Body" element="ws:CreateAddCaseResponse"/><!-- ws__fvdb_createAndAddCase::out -->
+</message>
+
+<message name="fvdb-getAllExistingCases">
+  <part name="Body" element="ws:fvdb-getAllExistingCases"/><!-- ws__fvdb_getAllExistingCases::ws__fvdb_getAllExistingCases -->
+</message>
+
+<message name="GetAllExistingCasesResponse">
+  <part name="Body" element="ws:GetAllExistingCasesResponse"/><!-- ws__fvdb_getAllExistingCases::out -->
+</message>
+
+<message name="fvdb-addCase">
+  <part name="Body" element="ws:fvdb-addCase"/><!-- ws__fvdb_addCase::ws__fvdb_addCase -->
+</message>
+
+<message name="addCaseResponse">
+  <part name="Body" element="ws:addCaseResponse"/><!-- ws__fvdb_addCase::out -->
+</message>
+
+<message name="fvdb-changeCaseProperties">
+  <part name="Body" element="ws:fvdb-changeCaseProperties"/><!-- ws__fvdb_changeCaseProperties::ws__fvdb_changeCaseProperties -->
+</message>
+
+<message name="changeCaseResponse">
+  <part name="Body" element="ws:changeCaseResponse"/><!-- ws__fvdb_changeCaseProperties::_param_1 -->
+</message>
+
+<message name="fvdb-caseExistsRequest">
+  <part name="Body" element="ws:fvdb-caseExists"/><!-- ws__fvdb_caseExists::ws__fvdb_caseExists -->
+</message>
+
+<message name="fvdb-caseExistsResponse">
+  <part name="Body" element="ws:fvdb-caseExistsResponse"/>
+</message>
+
+<message name="fvdb-deleteCase">
+  <part name="Body" element="ws:fvdb-deleteCase"/><!-- ws__fvdb_deleteCase::ws__fvdb_deleteCase -->
+</message>
+
+<message name="deleteCaseResponse">
+  <part name="Body" element="ws:deleteCaseResponse"/><!-- ws__fvdb_deleteCase::_param_1 -->
+</message>
+
+<message name="fvdb-deleteFIR">
+  <part name="Body" element="ws:fvdb-deleteFIR"/><!-- ws__fvdb_deleteFIR::ws__fvdb_deleteFIR -->
+</message>
+
+<message name="deleteFIRResponse">
+  <part name="Body" element="ws:deleteFIRResponse"/><!-- ws__fvdb_deleteFIR::_param_1 -->
+</message>
+
+<message name="fvdb-getReferenceImage">
+  <part name="Body" element="ws:fvdb-getReferenceImage"/><!-- ws__fvdb_getReferenceImage::ws__fvdb_getReferenceImage -->
+</message>
+
+<message name="ReferenceImageResponse">
+  <part name="Body" element="ws:ReferenceImageResponse"/><!-- ws__fvdb_getReferenceImage::res -->
+</message>
+
+<message name="fvdb-getCaseImages">
+  <part name="Body" element="ws:fvdb-getCaseImages"/><!-- ws__fvdb_getCaseImages::ws__fvdb_getCaseImages -->
+</message>
+
+<message name="CaseImagesResponse">
+  <part name="Body" element="ws:CaseImagesResponse"/><!-- ws__fvdb_getCaseImages::res -->
+</message>
+
+<message name="enrollment-db">
+  <part name="Body" element="ws:enrollment-db"/><!-- ws__enrollment_db::ws__enrollment_db -->
+</message>
+
+<message name="EnrollmentResponseDB">
+  <part name="Body" element="ws:EnrollmentResponseDB"/><!-- ws__enrollment_db::res -->
+</message>
+
+<message name="enrollment-set">
+  <part name="Body" element="ws:enrollment-set"/><!-- ws__enrollment_set::ws__enrollment_set -->
+</message>
+
+<message name="EnrollmentResponseSET">
+  <part name="Body" element="ws:EnrollmentResponseSET"/><!-- ws__enrollment_set::res -->
+</message>
+
+<message name="enrollment-refset">
+  <part name="Body" element="ws:enrollment-refset"/><!-- ws__enrollment_refset::ws__enrollment_refset -->
+</message>
+
+<message name="EnrollmentResponseREFSET">
+  <part name="Body" element="ws:EnrollmentResponseREFSET"/><!-- ws__enrollment_refset::res -->
+</message>
+
+<message name="enrollment-annotated">
+  <part name="Body" element="ws:enrollment-annotated"/><!-- ws__enrollment_annotated::ws__enrollment_annotated -->
+</message>
+
+<message name="EnrollmentResponseANN">
+  <part name="Body" element="ws:EnrollmentResponseANN"/><!-- ws__enrollment_annotated::res -->
+</message>
+
+<message name="identification-caseID">
+  <part name="Body" element="ws:identification-caseID"/><!-- ws__identification_caseID::ws__identification_caseID -->
+</message>
+
+<message name="Ident-CaseID-Response">
+  <part name="Body" element="ws:Ident-CaseID-Response"/><!-- ws__identification_caseID::res -->
+</message>
+
+<message name="identification">
+  <part name="Body" element="ws:identification"/><!-- ws__identification::ws__identification -->
+</message>
+
+<message name="Ident-Response">
+  <part name="Body" element="ws:Ident-Response"/><!-- ws__identification::res -->
+</message>
+
+<message name="identification-annotated">
+  <part name="Body" element="ws:identification-annotated"/><!-- ws__identification_annotated::ws__identification_annotated -->
+</message>
+
+<message name="Ident-Annotated-Response">
+  <part name="Body" element="ws:Ident-Annotated-Response"/><!-- ws__identification_annotated::res -->
+</message>
+
+<message name="getVideoSources">
+  <part name="Body" element="ws:getVideoSources"/><!-- ws__getVideoSources::ws__getVideoSources -->
+</message>
+
+<message name="getVideoSourcesResponse">
+  <part name="Body" element="ws:getVideoSourcesResponse"/><!-- ws__getVideoSources::r -->
+</message>
+
+<message name="getConfiguredVideoSources">
+  <part name="Body" element="ws:getConfiguredVideoSources"/><!-- ws__getConfiguredVideoSources::ws__getConfiguredVideoSources -->
+</message>
+
+<message name="getConfiguredVideoSourcesResponse">
+  <part name="Body" element="ws:getConfiguredVideoSourcesResponse"/><!-- ws__getConfiguredVideoSources::r -->
+</message>
+
+<message name="start-processing-video">
+  <part name="Body" element="ws:start-processing-video"/><!-- ws__start_processing_video::ws__start_processing_video -->
+</message>
+
+<message name="Start-Proc-Video-Response">
+  <part name="Body" element="ws:Start-Proc-Video-Response"/><!-- ws__start_processing_video::out -->
+</message>
+
+<message name="stop-processing-video">
+  <part name="Body" element="ws:stop-processing-video"/><!-- ws__stop_processing_video::ws__stop_processing_video -->
+</message>
+
+<message name="Stop-Proc-Video-Response">
+  <part name="Body" element="ws:Stop-Proc-Video-Response"/><!-- ws__stop_processing_video::out -->
+</message>
+
+<portType name="FVVideoScan_IntegrationPortType">
+  <operation name="alive">
+    <documentation>checks whether the VideoScanServer is reachable</documentation>
+    <input message="tns:alive"/>
+    <output message="tns:aliveResponse"/>
+  </operation>
+  <operation name="getProductVersion">
+    <documentation>Returns</documentation>
+    <input message="tns:getProductVersionRequest"/>
+    <output message="tns:getProductVersionResponse"/>
+  </operation>
+  <operation name="fvdb-createAndAddCase">
+    <documentation>creates a new caseID identifier and adds it to the database. If the properties list is non empty the list entries will be used to set the case properties using the property name as database column name. The given value string than is converted to the appropriate database column type. Retruns the new caseID identifier.</documentation>
+    <input message="tns:fvdb-createAndAddCase"/>
+    <output message="tns:CreateAddCaseResponse"/>
+  </operation>
+  <operation name="fvdb-getAllExistingCases">
+    <documentation>Service definition of function ws__fvdb_getAllExistingCases</documentation>
+    <input message="tns:fvdb-getAllExistingCases"/>
+    <output message="tns:GetAllExistingCasesResponse"/>
+  </operation>
+  <operation name="fvdb-addCase">
+    <documentation>add a case with caseID identifier to the database. If the properties list is non empty the list entries will be used to set the case properties using the property name as database column name. The given value string than is converted to the appropriate database column type.</documentation>
+    <input message="tns:fvdb-addCase"/>
+    <output message="tns:addCaseResponse"/>
+  </operation>
+  <operation name="fvdb-changeCaseProperties">
+    <documentation>changes the properties for the case with caseID identifier. If the properties list is non empty the list entries will be used to set the case properties using the property name as database column name. The given value string than is converted to the appropriate database column type.</documentation>
+    <input message="tns:fvdb-changeCaseProperties"/>
+    <output message="tns:changeCaseResponse"/>
+  </operation>
+  <operation name="fvdb-caseExists">
+    <documentation>checks if the case already exists in the database and returns true in that case, otherwise false.</documentation>
+    <input message="tns:fvdb-caseExistsRequest"/>
+    <output message="tns:fvdb-caseExistsResponse"/>
+  </operation>
+  <operation name="fvdb-deleteCase">
+    <documentation>Service definition of function ws__fvdb_deleteCase</documentation>
+    <input message="tns:fvdb-deleteCase"/>
+    <output message="tns:deleteCaseResponse"/>
+  </operation>
+  <operation name="fvdb-deleteFIR">
+    <documentation>deletes Secondary Biometric Data (FIR) for case with caseID</documentation>
+    <input message="tns:fvdb-deleteFIR"/>
+    <output message="tns:deleteFIRResponse"/>
+  </operation>
+  <operation name="fvdb-getReferenceImage">
+    <documentation>returns a reference image (thumbnail) for a case by  caseID</documentation>
+    <input message="tns:fvdb-getReferenceImage"/>
+    <output message="tns:ReferenceImageResponse"/>
+  </operation>
+  <operation name="fvdb-getCaseImages">
+    <documentation>returns all images for a gallery case by  caseID</documentation>
+    <input message="tns:fvdb-getCaseImages"/>
+    <output message="tns:CaseImagesResponse"/>
+  </operation>
+  <operation name="enrollment-db">
+    <documentation>enroll the case from the current database primary data of a case. caseID names the case to enroll, authName can be used to log the name of the client requesting the enrollment. Results of the enrollment are returned in results.</documentation>
+    <input message="tns:enrollment-db"/>
+    <output message="tns:EnrollmentResponseDB"/>
+  </operation>
+  <operation name="enrollment-set">
+    <documentation>enroll the case from a given set of images. caseID names the case to enroll, imgSet contains a list of images (supported image formats: JPEG, PNG, PGM), authName can be used to log the name of the client requesting the enrollment. Results of the enrollment are returned in results.</documentation>
+    <input message="tns:enrollment-set"/>
+    <output message="tns:EnrollmentResponseSET"/>
+  </operation>
+  <operation name="enrollment-refset">
+    <documentation>enroll the case from a given set of images by name. caseID names the case to enroll, imgSet contains a list of image (file) names (supported image formats: JPEG, PNG, PGM), authName is who trigers the enrollment. Results of the enrollment are returned in results.</documentation>
+    <input message="tns:enrollment-refset"/>
+    <output message="tns:EnrollmentResponseREFSET"/>
+  </operation>
+  <operation name="enrollment-annotated">
+    <documentation>enroll the case from a given set of annotated images and stores it in the database. caseID names the case to enroll, aImgSet contains a list of annotated images (supported image formats: JPEG, PNG, PGM), authName is who trigers the enrollment. Results of the enrollment are returned in results.</documentation>
+    <input message="tns:enrollment-annotated"/>
+    <output message="tns:EnrollmentResponseANN"/>
+  </operation>
+  <operation name="identification-caseID">
+    <documentation>identify the probe gallery case given by caseID against all galleries. authName names who triggers the identification, maxMatches states the max lenght of the returned match list which is contained in the result, only matches above the matchListThreshold become member of the match list, priority controls the processing priority, a lower value means higher processing priority, range [ 0 ... MAX_INT]</documentation>
+    <input message="tns:identification-caseID"/>
+    <output message="tns:Ident-CaseID-Response"/>
+  </operation>
+  <operation name="identification">
+    <documentation>identify the given probe image (supported image formats: JPEG, PNG, PGM) against all appearances. authName names who triggers the identification, maxMatches states the max lenght of the returned match list which is contained in the result, only matches above the matchListThreshold becomes member of the match list, priority controls the processing priority, a lower value means higher processing priority, range [ 0 ... MAX_INT]</documentation>
+    <input message="tns:identification"/>
+    <output message="tns:Ident-Response"/>
+  </operation>
+  <operation name="identification-annotated">
+    <documentation>identify the given annotated probe image (supported image formats: JPEG, PNG, PGM) against all appearances. authName names who triggers the identification, maxMatches states the max lenght of the returned match list which is contained in the result, only matches above the matchListThreshold becomes member of the match list, priority controls the processing priority, a lower value means higher processing priority, range [ 0 ... MAX_INT]</documentation>
+    <input message="tns:identification-annotated"/>
+    <output message="tns:Ident-Annotated-Response"/>
+  </operation>
+  <operation name="getVideoSources">
+    <documentation>return the configured video sources with details</documentation>
+    <input message="tns:getVideoSources"/>
+    <output message="tns:getVideoSourcesResponse"/>
+  </operation>
+  <operation name="getConfiguredVideoSources">
+    <documentation>return the configured video sources with details</documentation>
+    <input message="tns:getConfiguredVideoSources"/>
+    <output message="tns:getConfiguredVideoSourcesResponse"/>
+  </operation>
+  <operation name="start-processing-video">
+    <documentation>start the processing of live video</documentation>
+    <input message="tns:start-processing-video"/>
+    <output message="tns:Start-Proc-Video-Response"/>
+  </operation>
+  <operation name="stop-processing-video">
+    <documentation>stop the processing of live video</documentation>
+    <input message="tns:stop-processing-video"/>
+    <output message="tns:Stop-Proc-Video-Response"/>
+  </operation>
+</portType>
+
+<binding name="FVVideoScan_Integration" type="tns:FVVideoScan_IntegrationPortType">
+  <SOAP:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <operation name="alive">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="getProductVersion">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="fvdb-createAndAddCase">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="fvdb-getAllExistingCases">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="fvdb-addCase">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="fvdb-changeCaseProperties">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="fvdb-caseExists">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="fvdb-deleteCase">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="fvdb-deleteFIR">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="fvdb-getReferenceImage">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="fvdb-getCaseImages">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="enrollment-db">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="enrollment-set">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="enrollment-refset">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="enrollment-annotated">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="identification-caseID">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="identification">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="identification-annotated">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="getVideoSources">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="getConfiguredVideoSources">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="start-processing-video">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="stop-processing-video">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+</binding>
+
+<service name="FVVideoScan_Integration">
+  <documentation>Web Services Interface for Cognitec FaceVACS-VideoScan 5.4.0.4 Integration</documentation>
+  <port name="FVVideoScan_Integration" binding="tns:FVVideoScan_Integration">
+    <SOAP:address location="http://40.122.37.245:1063"/>
+  </port>
+</service>
+
+</definitions>

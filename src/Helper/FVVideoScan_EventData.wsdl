@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="FVVideoScan_EventData"
+  targetNamespace="urn:cognitec.com/VideoScan/WS/EventData/2.0/XMLSchema/FVVideoScan_EventData.wsdl"
+  xmlns:tns="urn:cognitec.com/VideoScan/WS/EventData/2.0/XMLSchema/FVVideoScan_EventData.wsdl"
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:aded="urn:cognitec.com/VideoScan/WS/EventData/2.0/XMLSchema"
+  xmlns:SOAP="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:HTTP="http://schemas.xmlsoap.org/wsdl/http/"
+  xmlns:MIME="http://schemas.xmlsoap.org/wsdl/mime/"
+  xmlns:DIME="http://schemas.xmlsoap.org/ws/2002/04/dime/wsdl/"
+  xmlns:WSDL="http://schemas.xmlsoap.org/wsdl/"
+  xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+<types>
+
+  <schema targetNamespace="urn:cognitec.com/VideoScan/WS/EventData/2.0/XMLSchema"
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:aded="urn:cognitec.com/VideoScan/WS/EventData/2.0/XMLSchema"
+    xmlns="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="unqualified"
+    attributeFormDefault="unqualified">
+    <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+    <simpleType name="EventState"><!-- aded__EventState -->
+      <restriction base="xsd:string">
+        <enumeration value="EventStarted"/><!-- EventStarted -->
+<!-- = 0 -->
+        <enumeration value="EventOngoing"/><!-- EventOngoing -->
+<!-- = 1 -->
+        <enumeration value="EventEnded"/><!-- EventEnded -->
+<!-- = 2 -->
+        <enumeration value="EventInvalidated"/><!-- EventInvalidated -->
+<!-- = 3 -->
+      </restriction>
+    </simpleType>
+    <complexType name="TimeStampWithMs">
+      <annotation>
+        <documentation>A high resolution Timestamp.</documentation>
+      </annotation>
+          <sequence>
+            <element name="utc" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/><!-- aded__TimeStampWithMs::utc -->
+            <element name="ms" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- aded__TimeStampWithMs::ms -->
+          </sequence>
+    </complexType>
+    <complexType name="JPEG">
+      <annotation>
+        <documentation>A JPEG image.</documentation>
+      </annotation>
+          <sequence>
+            <element name="binaryImg" type="xsd:base64Binary" minOccurs="1" maxOccurs="1" nillable="true"/><!-- aded__JPEG::binaryImg -->
+          </sequence>
+    </complexType>
+    <complexType name="EventMember">
+      <annotation>
+        <documentation>The base of all EventMembers. EventMembers are containers for various primitive or complex types to model a dynamic type system.</documentation>
+      </annotation>
+          <sequence>
+          </sequence>
+    </complexType>
+    <complexType name="NamedEventMember">
+      <annotation>
+        <documentation>An EventMember with an associated name.</documentation>
+      </annotation>
+          <sequence>
+            <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__NamedEventMember::name -->
+            <element name="eventMember" type="aded:EventMember" minOccurs="1" maxOccurs="1" nillable="true"/><!-- aded__NamedEventMember::eventMember -->
+          </sequence>
+    </complexType>
+    <complexType name="StringEventMember">
+      <annotation>
+        <documentation>An eventMember modelling a string.</documentation>
+      </annotation>
+      <complexContent>
+        <extension base="aded:EventMember">
+          <sequence>
+            <element name="str" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__StringEventMember::str -->
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+    <complexType name="NumberEventMember">
+      <annotation>
+        <documentation>An eventMember modelling a floating point number.</documentation>
+      </annotation>
+      <complexContent>
+        <extension base="aded:EventMember">
+          <sequence>
+            <element name="num" type="xsd:double" minOccurs="1" maxOccurs="1"/><!-- aded__NumberEventMember::num -->
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+    <complexType name="BoolEventMember">
+      <annotation>
+        <documentation>An eventMember modelling a boolean value.</documentation>
+      </annotation>
+      <complexContent>
+        <extension base="aded:EventMember">
+          <sequence>
+            <element name="b" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- aded__BoolEventMember::b -->
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+    <complexType name="TimeStampEventMember">
+      <annotation>
+        <documentation>An eventMember modelling a timestamp.</documentation>
+      </annotation>
+      <complexContent>
+        <extension base="aded:EventMember">
+          <sequence>
+            <element name="timeStamp" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/><!-- aded__TimeStampEventMember::timeStamp -->
+            <element name="ms" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- aded__TimeStampEventMember::ms -->
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+    <complexType name="ImageEventMember">
+      <annotation>
+        <documentation>An eventMember modelling an image.</documentation>
+      </annotation>
+      <complexContent>
+        <extension base="aded:EventMember">
+          <sequence>
+            <element name="image" type="aded:JPEG" minOccurs="1" maxOccurs="1"/><!-- aded__ImageEventMember::image -->
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+    <complexType name="ImageIdEventMember">
+      <annotation>
+        <documentation>An eventMember modelling the ID of an image.</documentation>
+      </annotation>
+      <complexContent>
+        <extension base="aded:EventMember">
+          <sequence>
+            <element name="id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__ImageIdEventMember::id -->
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+    <complexType name="Video">
+      <annotation>
+        <documentation>A video stream. Currently actually just a list of frames.</documentation>
+      </annotation>
+          <sequence>
+            <element name="frames" type="aded:JPEG" minOccurs="0" maxOccurs="unbounded"/><!-- aded__Video::frames -->
+          </sequence>
+    </complexType>
+    <complexType name="VideoEventMember">
+      <annotation>
+        <documentation>An eventMember modelling a video stream.</documentation>
+      </annotation>
+      <complexContent>
+        <extension base="aded:EventMember">
+          <sequence>
+            <element name="video" type="aded:Video" minOccurs="1" maxOccurs="1"/><!-- aded__VideoEventMember::video -->
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+    <complexType name="ComplexEventMember">
+      <annotation>
+        <documentation>An eventMember modelling a complex data type. complexTypeId is the name of the modelled complex type, namedEventMembers represents the members of this type.</documentation>
+      </annotation>
+      <complexContent>
+        <extension base="aded:EventMember">
+          <sequence>
+            <element name="complexTypeId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__ComplexEventMember::complexTypeId -->
+            <element name="namedEventMembers" type="aded:NamedEventMember" minOccurs="0" maxOccurs="unbounded"/><!-- aded__ComplexEventMember::namedEventMembers -->
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+    <complexType name="ListEventMember"><!-- aded__ListEventMember -->
+      <complexContent>
+        <extension base="aded:EventMember">
+          <sequence>
+            <element name="eventMembers" type="aded:EventMember" minOccurs="0" maxOccurs="unbounded" nillable="true"/><!-- aded__ListEventMember::eventMembers -->
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+    <complexType name="EnumEventMember">
+      <annotation>
+        <documentation>An eventMember modelling an enum type. enumTypeId is the name of the modelled enum type, values contains all possible values and index identifies the currently selected value.</documentation>
+      </annotation>
+      <complexContent>
+        <extension base="aded:EventMember">
+          <sequence>
+            <element name="enumTypeId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__EnumEventMember::enumTypeId -->
+            <element name="index" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- aded__EnumEventMember::index -->
+            <element name="values" type="xsd:string" minOccurs="1" maxOccurs="unbounded"/><!-- aded__EnumEventMember::values -->
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+    <complexType name="FunctionKeyValue">
+      <annotation>
+        <documentation>A value table entry of a function eventMember.</documentation>
+      </annotation>
+          <sequence>
+            <element name="key" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__FunctionKeyValue::key -->
+            <element name="value" type="xsd:double" minOccurs="1" maxOccurs="1"/><!-- aded__FunctionKeyValue::value -->
+          </sequence>
+    </complexType>
+    <complexType name="FunctionEventMember">
+      <annotation>
+        <documentation>An eventMember modelling a function represented by a value table. Also contains labels for the keys and values.</documentation>
+      </annotation>
+      <complexContent>
+        <extension base="aded:EventMember">
+          <sequence>
+            <element name="keyValueTable" type="aded:FunctionKeyValue" minOccurs="0" maxOccurs="unbounded"/><!-- aded__FunctionEventMember::keyValueTable -->
+            <element name="keyLabel" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__FunctionEventMember::keyLabel -->
+            <element name="valueLabel" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__FunctionEventMember::valueLabel -->
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+    <complexType name="GenericEventDescription">
+      <annotation>
+        <documentation>Holds data describing an event. The detectorId identifies the unique name of the event detector, while display name is a potentially more human-readable name to be used for display purposes. The eventId identifies to the instance of the event and the type ID identifies the catalog event type this event is an instance of. Start and end represent the time at which the event was taking place. The state marks the event as ongoing, ended or invalidated. Named eventMembers contain the event-specific data.</documentation>
+      </annotation>
+          <sequence>
+            <element name="detectorId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__GenericEventDescription::detectorId -->
+            <element name="displayName" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__GenericEventDescription::displayName -->
+            <element name="eventId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__GenericEventDescription::eventId -->
+            <element name="typeId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__GenericEventDescription::typeId -->
+            <element name="start" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/><!-- aded__GenericEventDescription::start -->
+            <element name="end" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/><!-- aded__GenericEventDescription::end -->
+            <element name="startWithMs" type="aded:TimeStampEventMember" minOccurs="1" maxOccurs="1"/><!-- aded__GenericEventDescription::startWithMs -->
+            <element name="endWithMs" type="aded:TimeStampEventMember" minOccurs="1" maxOccurs="1"/><!-- aded__GenericEventDescription::endWithMs -->
+            <element name="state" type="aded:EventState" minOccurs="1" maxOccurs="1"/><!-- aded__GenericEventDescription::state -->
+            <element name="namedEventMembers" type="aded:NamedEventMember" minOccurs="0" maxOccurs="unbounded"/><!-- aded__GenericEventDescription::namedEventMembers -->
+          </sequence>
+    </complexType>
+    <complexType name="EventNotification">
+      <annotation>
+        <documentation>Holds data describing an event. The detectorId identifies the unique name of the event detector, while display name is a potentially more human-readable name to be used for display purposes. The ID identifies to the instance of the event and the type ID identifies the catalog event type this event is an instance of. Start and end represent the time at which the event was taking place. The state marks the event as ongoing, ended or invalidated. The generation ID changes every time an event is updated to keep track of changes.</documentation>
+      </annotation>
+          <sequence>
+            <element name="eventId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__EventNotification::eventId -->
+            <element name="typeId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__EventNotification::typeId -->
+            <element name="detectorId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__EventNotification::detectorId -->
+            <element name="displayName" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__EventNotification::displayName -->
+            <element name="state" type="aded:EventState" minOccurs="1" maxOccurs="1"/><!-- aded__EventNotification::state -->
+            <element name="start" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/><!-- aded__EventNotification::start -->
+            <element name="end" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/><!-- aded__EventNotification::end -->
+            <element name="startWithMs" type="aded:TimeStampEventMember" minOccurs="1" maxOccurs="1"/><!-- aded__EventNotification::startWithMs -->
+            <element name="endWithMs" type="aded:TimeStampEventMember" minOccurs="1" maxOccurs="1"/><!-- aded__EventNotification::endWithMs -->
+            <element name="generationId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__EventNotification::generationId -->
+          </sequence>
+    </complexType>
+    <complexType name="GenerationalEventId">
+      <annotation>
+        <documentation>Utility structure to group an event ID and its current generation ID together.</documentation>
+      </annotation>
+          <sequence>
+            <element name="eventId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__GenerationalEventId::eventId -->
+            <element name="generationId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__GenerationalEventId::generationId -->
+          </sequence>
+    </complexType>
+    <complexType name="ConfiguredEvent"><!-- aded__ConfiguredEvent -->
+          <sequence>
+            <element name="eventName" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__ConfiguredEvent::eventName -->
+            <element name="typeId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__ConfiguredEvent::typeId -->
+            <element name="displayName" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__ConfiguredEvent::displayName -->
+          </sequence>
+    </complexType>
+    <complexType name="Position"><!-- aded__Position -->
+          <sequence>
+            <element name="x" type="xsd:float" minOccurs="1" maxOccurs="1"/><!-- aded__Position::x -->
+            <element name="y" type="xsd:float" minOccurs="1" maxOccurs="1"/><!-- aded__Position::y -->
+          </sequence>
+    </complexType>
+    <complexType name="EyePositions"><!-- aded__EyePositions -->
+          <sequence>
+            <element name="left" type="aded:Position" minOccurs="1" maxOccurs="1"/><!-- aded__EyePositions::left -->
+            <element name="right" type="aded:Position" minOccurs="1" maxOccurs="1"/><!-- aded__EyePositions::right -->
+          </sequence>
+    </complexType>
+    <complexType name="ImageMetaData"><!-- aded__ImageMetaData -->
+          <sequence>
+            <element name="captureTime" type="aded:TimeStampEventMember" minOccurs="1" maxOccurs="1"/><!-- aded__ImageMetaData::captureTime -->
+            <element name="eyePositions" type="aded:EyePositions" minOccurs="1" maxOccurs="1"/><!-- aded__ImageMetaData::eyePositions -->
+            <element name="thumbnailOffset" type="aded:Position" minOccurs="1" maxOccurs="1"/><!-- aded__ImageMetaData::thumbnailOffset -->
+          </sequence>
+    </complexType>
+    <complexType name="ImageResponse"><!-- aded__ImageResponse -->
+          <sequence>
+            <element name="image" type="aded:JPEG" minOccurs="1" maxOccurs="1"/><!-- aded__ImageResponse::image -->
+            <element name="metadata" type="aded:ImageMetaData" minOccurs="1" maxOccurs="1"/><!-- aded__ImageResponse::metadata -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getDescription">
+      <complexType>
+          <sequence>
+            <element name="id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__getDescription::id -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getDescriptionResponse" type="aded:getDescriptionResponse"/>
+    <complexType name="getDescriptionResponse">
+          <sequence>
+            <element name="ged" type="aded:GenericEventDescription" minOccurs="1" maxOccurs="1"/><!-- aded__getDescriptionResponse::ged -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getNotifications">
+      <complexType>
+          <sequence>
+            <element name="knowsEvents" type="aded:GenerationalEventId" minOccurs="1" maxOccurs="unbounded"/><!-- aded__getNotifications::knowsEvents -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getNotificationsResponse" type="aded:getNotificationsResponse"/>
+    <complexType name="getNotificationsResponse">
+          <sequence>
+            <element name="notifications" type="aded:EventNotification" minOccurs="0" maxOccurs="unbounded"/><!-- aded__getNotificationsResponse::notifications -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getImage">
+      <complexType>
+          <sequence>
+            <element name="imageId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__getImage::imageId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getImageResponse" type="aded:getImageResponse"/>
+    <complexType name="getImageResponse">
+          <sequence>
+            <element name="imageAndMetaData" type="aded:ImageResponse" minOccurs="1" maxOccurs="1"/><!-- aded__getImageResponse::imageAndMetaData -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getVideo">
+      <complexType>
+          <sequence>
+            <element name="id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- aded__getVideo::id -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getVideoResponse" type="aded:getVideoResponse"/>
+    <complexType name="getVideoResponse">
+          <sequence>
+            <element name="video" type="aded:Video" minOccurs="1" maxOccurs="1"/><!-- aded__getVideoResponse::video -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getConfiguredEvents">
+      <complexType>
+          <sequence>
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getConfiguredEventsResponse" type="aded:getConfiguredEventsResponse"/>
+    <complexType name="getConfiguredEventsResponse">
+          <sequence>
+            <element name="configuredEvents" type="aded:ConfiguredEvent" minOccurs="0" maxOccurs="unbounded"/><!-- aded__getConfiguredEventsResponse::configuredEvents -->
+          </sequence>
+    </complexType>
+  </schema>
+
+</types>
+
+<message name="getDescription">
+  <part name="Body" element="aded:getDescription"/><!-- aded__getDescription::aded__getDescription -->
+</message>
+
+<message name="getDescriptionResponse">
+  <part name="Body" element="aded:getDescriptionResponse"/><!-- aded__getDescription::r -->
+</message>
+
+<message name="getNotifications">
+  <part name="Body" element="aded:getNotifications"/><!-- aded__getNotifications::aded__getNotifications -->
+</message>
+
+<message name="getNotificationsResponse">
+  <part name="Body" element="aded:getNotificationsResponse"/><!-- aded__getNotifications::r -->
+</message>
+
+<message name="getImage">
+  <part name="Body" element="aded:getImage"/><!-- aded__getImage::aded__getImage -->
+</message>
+
+<message name="getImageResponse">
+  <part name="Body" element="aded:getImageResponse"/><!-- aded__getImage::r -->
+</message>
+
+<message name="getVideo">
+  <part name="Body" element="aded:getVideo"/><!-- aded__getVideo::aded__getVideo -->
+</message>
+
+<message name="getVideoResponse">
+  <part name="Body" element="aded:getVideoResponse"/><!-- aded__getVideo::r -->
+</message>
+
+<message name="getConfiguredEvents">
+  <part name="Body" element="aded:getConfiguredEvents"/><!-- aded__getConfiguredEvents::aded__getConfiguredEvents -->
+</message>
+
+<message name="getConfiguredEventsResponse">
+  <part name="Body" element="aded:getConfiguredEventsResponse"/><!-- aded__getConfiguredEvents::r -->
+</message>
+
+<portType name="FVVideoScan_EventDataPortType">
+  <operation name="getDescription">
+    <documentation>Get the full description of an event identified by its ID. If the ID is invalid an empty event with the state Invalidated is returned.</documentation>
+    <input message="tns:getDescription"/>
+    <output message="tns:getDescriptionResponse"/>
+  </operation>
+  <operation name="getNotifications">
+    <documentation>Get notifications about new, deleted or updated events. The known events represent the current state of the client. Every known event is associated with a generation ID that is continuously incremented when the event is updated. After receiving a notification for one event you have to store the generation ID and use it in the next call of getNotifications. The call blocks if no notifications are available.</documentation>
+    <input message="tns:getNotifications"/>
+    <output message="tns:getNotificationsResponse"/>
+  </operation>
+  <operation name="getImage">
+    <documentation>Get an image by ImageID.</documentation>
+    <input message="tns:getImage"/>
+    <output message="tns:getImageResponse"/>
+  </operation>
+  <operation name="getVideo">
+    <documentation>Not supported at the moment.</documentation>
+    <input message="tns:getVideo"/>
+    <output message="tns:getVideoResponse"/>
+  </operation>
+  <operation name="getConfiguredEvents">
+    <documentation>Service definition of function aded__getConfiguredEvents</documentation>
+    <input message="tns:getConfiguredEvents"/>
+    <output message="tns:getConfiguredEventsResponse"/>
+  </operation>
+</portType>
+
+<binding name="FVVideoScan_EventData" type="tns:FVVideoScan_EventDataPortType">
+  <SOAP:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <operation name="getDescription">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="getNotifications">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="getImage">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="getVideo">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+  <operation name="getConfiguredEvents">
+    <SOAP:operation soapAction=""/>
+    <input>
+          <SOAP:body parts="Body" use="literal"/>
+    </input>
+    <output>
+          <SOAP:body parts="Body" use="literal"/>
+    </output>
+  </operation>
+</binding>
+
+<service name="FVVideoScan_EventData">
+  <documentation>The event data protocol allows you to receive event notifications and event data from the VideoScanServer. Call getNotifications to receive light-weight notifications about changes in the current event set. These changes include new, updated or invalidated events. An event notification contains only the most basic information about an event, including its ID, state, name, display name, type ID and start/end time. It also contains a generation ID to identify changes to the event. After receiving notifications about events, you can request the full event description by using the event ID to call getDescription. The full description is potentially large, as it may contain images.</documentation>
+  <port name="FVVideoScan_EventData" binding="tns:FVVideoScan_EventData">
+    <SOAP:address location="http://40.122.37.245:1065"/>
+  </port>
+</service>
+
+</definitions>
